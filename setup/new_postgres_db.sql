@@ -14,7 +14,8 @@ CREATE TABLE users (
     FOREIGN KEY (role_id) REFERENCES user_roles(id) ON UPDATE CASCADE
 );
 
-INSERT INTO users (username, role_id, has_root_login) VALUES ('uqaskars', 0, true);
+-- Easily add in a new user now
+-- INSERT INTO users (username, role_id, has_root_login) VALUES ('user1', 0, false);
 
 CREATE TABLE genome_sources (
     id serial PRIMARY KEY,
