@@ -1,4 +1,4 @@
-import generic
+from . import generic
 
 profiles = {"generic" : generic}
 

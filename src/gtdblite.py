@@ -187,7 +187,7 @@ def ViewGenomeLists(db, args):
         return False
 
     if len(genome_lists) == 0:
-        print "No genomes lists found."
+        print("No genomes lists found.")
         return True
     return db.PrintGenomeListsDetails(genome_lists)
 
@@ -228,7 +228,7 @@ def CreateMarkerSet(db, args):
 
     external_ids = []
 
-    if args.genome_ids:
+    if args.id_list:
         external_ids = args.id_list.split(",")
     marker_set_id = db.CreateMarkerSet(args.batchfile, external_ids, args.name, args.description, (not args.public))
 
@@ -265,7 +265,7 @@ def ViewMarkerSets(db, args):
         return False
 
     if len(marker_sets) == 0:
-        print "No marker sets found."
+        print("No marker sets found.")
         return True
     return db.PrintMarkerSetsDetails(marker_sets)
 
@@ -503,7 +503,7 @@ if __name__ == '__main__':
                                         help='Create a marker set')
     parser_marker_sets_create.add_argument('--batchfile', dest = 'batchfile',
                                         help='A file of marker IDs, one per line, to add to the created set')
-    parser_marker_sets_create.add_argument('--marker_ids', dest = 'genome_ids',
+    parser_marker_sets_create.add_argument('--marker_ids', dest = 'id_list',
                                         help='List of marker IDs (comma separated) to add to the created set')
     parser_marker_sets_create.add_argument('--name', dest = 'name', required=True,
                                         help='The name of the marker set.')

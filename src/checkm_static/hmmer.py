@@ -28,7 +28,7 @@ class HMMERParser():
     def __init__(self, fileHandle):
         self.handle = fileHandle
 
-    def next(self):
+    def __next__(self):
         return self.readHitsTBL()
 
     def readHitsTBL(self):

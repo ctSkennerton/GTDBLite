@@ -27,7 +27,7 @@ def ReportIncorrectParameter(db, param, expected_type, got_type, got_value):
     
 def CheckPassedConfigsAgainstKnownConfigs(db, passed_config_dict, valid_configs):
     valid_configs_type_dict = dict([(name, config_type) for (name, config_type, description) in valid_configs])
-    for (config_key, value) in passed_config_dict.items():
+    for (config_key, value) in list(passed_config_dict.items()):
         if config_key in valid_configs_type_dict:
             if valid_configs_type_dict[config_key] != type(value):
                 if valid_configs_type_dict[config_key] == type(None):
