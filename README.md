@@ -1,3 +1,10 @@
+# Genome Tree Database
+This is a database effort to make it easy to make genome trees 
+of various subsets of genomes with various markers. This fork
+is behind the times and a [completely revamped version](https://github.com/Ecogenomics/GTDBNCBI)
+is under active development elsewhere. Anyone looking to setup
+their own database from scratch should look there.
+
 It uses your username on the server to login so you need to make sure everyone uses their server username in the GTDB.
 
 To set it up you need to do the following (i think - has been a while since I had to do a full setup):
@@ -65,18 +72,20 @@ Should say "No genomes found" or something like that.
     of that genome. Note that the fourth column must match the first
     column of the CheckM output. With these two file you can then fun
     the following command:
+
 ```
 gtdblite.py -r genomes add --batchfile root_user/IMG_genomes.batchfile --checkm_results root_user/checkm.profiles.tsv --create_list "IMG Genomes"
 ```
-    An important thing to note is that when adding in genomes as the root
-    user (see the `-r` in the command) the files themselves will not be
-    copied into the locations set for user data. Instead only a reference
-    to the files is stored in the database. The motovation for this is
-    that these genomes probably represent a large amout of disk space that
-    we don't want to copy and it is likely that you may want to use these
-    files for other purposes than the genome tree database. In contrast,
-    when adding in genomes as a user (without the `-r` option above) the
-    files will be copied into the genome tree database user data folder.
+
+An important thing to note is that when adding in genomes as the root
+user (see the `-r` in the command) the files themselves will not be
+copied into the locations set for user data. Instead only a reference
+to the files is stored in the database. The motovation for this is
+that these genomes probably represent a large amout of disk space that
+we don't want to copy and it is likely that you may want to use these
+files for other purposes than the genome tree database. In contrast,
+when adding in genomes as a user (without the `-r` option above) the
+files will be copied into the genome tree database user data folder.
 
 12. Build your tree
 ```
