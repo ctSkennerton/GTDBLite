@@ -532,7 +532,7 @@ class GenomeDatabase(object):
                               source=None, id_at_source=None, completeness=0, contamination=0):
         try:
             try:
-                fasta_fh = open(fasta_file_path, "r")
+                fasta_fh = open(fasta_file_path, "rb")
             except:
                 raise GenomeDatabaseError("Cannot open Fasta file: " + fasta_file_path)
 
@@ -570,7 +570,7 @@ class GenomeDatabase(object):
                 raise GenomeDatabaseError("Could not find the %s genome source." % source)
 
             if id_at_source is None:
-                cur.execute("SELECT id_at_source FROM genomes WHERE genome_source_id = %s order by id_at_source::int desc", (source_id,))
+                cur.execute("SELECT id_at_source::int FROM genomes WHERE genome_source_id = %s order by id_at_source::int desc", (source_id,))
                 last_id = None
                 for (last_id_at_source, ) in cur:
                     last_id = last_id_at_source
