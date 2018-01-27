@@ -148,7 +148,24 @@ To add in genomes as the root user:
 gtdblite.py -r genomes add --batchfile <batchfile> --checkm_results <checkm> --create_list <Genome List Name>
 ```
 
-### Getting an alignment for tree building
+### Looking for available data
+
+#### Genome lists
 ```
-        gtdblite.py -t 20 trees create --genome_ids U_67,U_68,U_69 --marker_set_ids 8 --output my_genomes_tree_data --profile_args guaranteed_genome_list_ids=7 --profile_args guaranteed_genome_ids=U_67,U_68,U_69
+gtdblite.py genome_lists view --everyone
+```
+
+#### Marker lists
+```
+gtdblite.py marker_sets view --everyone
+```
+
+### Getting an alignment for tree building
+Getting an alignment is very flexible it is possible to specify any
+combination of individual genome ids, genome list ids, marker ids, and
+marker set ids on the command line. Finding out the right genome list id
+and marker set id can be achieved using `gtdblite.py genome_lists view`
+and `gtdblite.py marker_sets view` sub-commands.
+```
+gtdblite.py -t 20 alignment create --genome_list_ids 1,2,3 --marker_set_ids 8,1 --output my_genomes_tree_data
 ```
