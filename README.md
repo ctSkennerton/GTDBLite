@@ -5,9 +5,11 @@ is behind the times and a [completely revamped version](https://github.com/Ecoge
 is under active development elsewhere. Anyone looking to setup
 their own database from scratch should look there.
 
-It uses your username on the server to login so you need to make sure everyone uses their server username in the GTDB.
-
-To set it up you need to do the following (i think - has been a while since I had to do a full setup):
+## Installation
+It uses your username on the server to login so you need to make sure
+everyone uses their server username in the GTDB.  To set it up you need
+to do the following (i think - has been a while since I had to do a
+full setup):
 
 1. Install postgres somewhere. 
 2. Logon to the postgres DB as the root or postgres user.
@@ -42,7 +44,8 @@ mkdir /db/gtdblite/user_data
 mkdir /db/gtdblite/user_data/genomes
 mkdir /db/gtdblite/user_data/markers
 ```
-9.  Edit the config file.
+9.  Make the config file. Make the file `src/gtdblite/Config.py` in where ever you downloaded the source code to
+    with the following lines. Changing the values to whatever is appropriate for your setup.
 ```    
 GTDB_HOST="<IP address of FQDN of psql server>" # e.g. localhost (if you plan to use it locally)
 GTDB_USERNAME="gtdb"
@@ -58,36 +61,94 @@ gtdblite.py genomes view --all
 ```
 Should say "No genomes found" or something like that.
 
-11. Add in reference genomes. You can download reference genomes from
-    NCBI or IMG repositories, it is probably easier to do this from
-    NCBI as there is an ftp server of complete bacterial and archaeal
-    genomes as the base. All genomes need to be run through CheckM before
-    they can be added into the database; save the CheckM results using
-    output format 2 (`-o 2`) and with the simple table (`--tab_table`)
-    to file. You must also have a four column batchfile that describes
-    the genomes that you want to add, the first column is the *full
-    path* to the file containing the genome, the second column is the
-    name of the genome, the third column is the source of the genome
-    (use either "NCBI" or "IMG") and the fourth column is the accession
-    of that genome. Note that the fourth column must match the first
-    column of the CheckM output. With these two file you can then fun
-    the following command:
+## Usage
+
+The GTDB is a flexible interface to build genome trees from any
+set of stored genomes using any set of stored marker genes. The 
+way it accomplishes this is through *lists* of genomes or markers
+added in by the user. When building a tree the user can select
+one or more *genome lists* and *marker lists* markers will be 
+automatically calculated for a genome and stored (so that the
+calculation occurs only once).
+
+### Where is data stored?
+When adding in a genome or marker to the GTDB the physical files
+will be copied to whichever directories you specified in the 
+config file for `GTDB_GENOME_COPY_DIR` and `GTDB_MARKER_COPY_DIR`.
+This means that if you accidentally delete your genome files there
+will still be a copy that you can extract from the GTDB.
+
+The exception to this is the *root user*. Any genomes added by the
+root user will not be copied. This is useful for reference genomes
+downloaded from NCBI or IMG which will already be quite large and
+therefore probably not worth copying.
+
+### Adding genomes
+
+
+### Adding genomes
+
+All genomes need to be run through CheckM before
+they can be added into the database; save the CheckM results using
+output format 2 (`-o 2`) and with the simple table (`--tab_table`)
+to file. You must also have a three column batchfile that describes
+the genomes that you want to add, the first column is the *full
+path* to the file containing the genome, the second column is the
+name of the genome, the third column is a short description of the genome.
+There are also two optional columns: the source of the genome
+(use either "NCBI" or "IMG") and the accession
+of that genome from the source (i.e the NCBI or IMG accession). 
+With these two files you can then run the following command:
 
 ```
-gtdblite.py -r genomes add --batchfile root_user/IMG_genomes.batchfile --checkm_results root_user/checkm.profiles.tsv --create_list "IMG Genomes"
+gtdblite.py genomes add --batchfile <batchfile> --checkm_results <checkm> --create_list <Genome List Name>
 ```
 
-An important thing to note is that when adding in genomes as the root
-user (see the `-r` in the command) the files themselves will not be
+### Adding tree backbone
+
+(Note: You only need to do this once to get a backbone phylogeny
+and you might not need it at all if you only want to make trees
+with your own genomes)
+
+Add in reference genomes. You can download reference genomes from
+NCBI or IMG repositories, it is probably easier to do this from
+NCBI as there is an ftp server of complete bacterial and archaeal
+genomes as the base.
+
+#### Downloading genomes from NCBI
+
+The following shell command will download all of the representative
+bacteria and archaea genomes from Refseq. It relies on having the
+[Entrez Direct](https://www.ncbi.nlm.nih.gov/books/NBK179288/)
+e-utilities installed. 
+```
+esearch -db assembly -query "(txid2157[Organism:exp] OR txid2[Organism:exp]) AND representative [PROP]" |\
+  efetch -format docsum |\
+  xtract -pattern DocumentSummary -element \
+  AssemblyAccession SpeciesTaxid SpeciesName FtpPath_RefSeq |\
+  sed 's/,.*//' |\
+  sort -k 3,3 |\
+  tee downloaded_genomes.tsv |\
+  cut -f 4 |\
+  sed -e 's/$/\/*genomic.gbff.gz/' |\
+  wget -i /dev/stdin
+```
+
+#### Adding reference genomes
+As mentioned above, when adding in genomes as the root
+user the files themselves will not be
 copied into the locations set for user data. Instead only a reference
 to the files is stored in the database. The motovation for this is
 that these genomes probably represent a large amout of disk space that
 we don't want to copy and it is likely that you may want to use these
-files for other purposes than the genome tree database. In contrast,
-when adding in genomes as a user (without the `-r` option above) the
-files will be copied into the genome tree database user data folder.
+files for other purposes than the genome tree database. 
 
-12. Build your tree
+To add in genomes as the root user:
+```
+gtdblite.py -r genomes add --batchfile <batchfile> --checkm_results <checkm> --create_list <Genome List Name>
+```
+
+### Getting an alignment for tree building
 ```
         gtdblite.py -t 20 trees create --genome_ids U_67,U_68,U_69 --marker_set_ids 8 --output my_genomes_tree_data --profile_args guaranteed_genome_list_ids=7 --profile_args guaranteed_genome_ids=U_67,U_68,U_69
 ```
