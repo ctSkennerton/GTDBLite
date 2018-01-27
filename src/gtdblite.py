@@ -325,8 +325,8 @@ if __name__ == '__main__':
     marker_set_category_parser = category_parser.add_parser('marker_sets', help='Access the marker set management sub-commands')
     marker_set_category_subparser = marker_set_category_parser.add_subparsers(help='Marker Set command help', dest='marker_sets_subparser_name')
 
-    tree_category_parser = category_parser.add_parser('trees', help='Access the tree management commands')
-    tree_category_subparser = tree_category_parser.add_subparsers(help='Tree command help', dest='tree_subparser_name')
+    alignment_category_parser = category_parser.add_parser('alignment', help='Access the alignment management commands')
+    alignment_category_subparser = alignment_category_parser.add_subparsers(help='Alignment command help', dest='alignment_subparser_name')
 
     profile_category_parser = category_parser.add_parser('profiles', help='Access the profile management commands')
     profile_category_subparser = profile_category_parser.add_subparsers(help='Profile command help', dest='profile_subparser_name')
@@ -566,36 +566,36 @@ if __name__ == '__main__':
 
 # -------- Generate Tree Data
 
-    parser_tree_create = tree_category_subparser.add_parser('create',
-                                        help='Create a genome tree')
+    parser_alignment_create = alignment_category_subparser.add_parser('create',
+                                        help='Create an alignment for a genome tree')
 
-    parser_tree_create.add_argument('--genome_batchfile', dest = 'genome_batchfile', default=None,
+    parser_alignment_create.add_argument('--genome_batchfile', dest = 'genome_batchfile', default=None,
                                         help='Provide a file of genome IDs, one per line, to include in the tree')
-    parser_tree_create.add_argument('--genome_ids', dest = 'genome_ids', default=None,
+    parser_alignment_create.add_argument('--genome_ids', dest = 'genome_ids', default=None,
                                         help='Provide a list of genome ids (comma separated), whose genomes should be included in the tree.')
-    parser_tree_create.add_argument('--genome_list_ids', dest = 'genome_list_ids', default=None,
+    parser_alignment_create.add_argument('--genome_list_ids', dest = 'genome_list_ids', default=None,
                                         help='Provide a list of genome list ids (comma separated), whose genomes should be included in the tree.')
-    parser_tree_create.add_argument('--all_genomes', dest = 'all_genomes', default=False, action='store_true',
+    parser_alignment_create.add_argument('--all_genomes', dest = 'all_genomes', default=False, action='store_true',
                                         help='Included ALL genomes in the database in the created tree.')
 
-    parser_tree_create.add_argument('--marker_batchfile', dest = 'marker_batchfile', default=None,
+    parser_alignment_create.add_argument('--marker_batchfile', dest = 'marker_batchfile', default=None,
                                         help='Provide a file of marker IDs, one per line, to build the tree')
-    parser_tree_create.add_argument('--marker_ids', dest = 'marker_ids', default=None,
+    parser_alignment_create.add_argument('--marker_ids', dest = 'marker_ids', default=None,
                                         help='Provide a list of marker ids (comma separated), whose markers will be used to build the tree.')
-    parser_tree_create.add_argument('--marker_set_ids', dest = 'marker_set_ids', default=None,
+    parser_alignment_create.add_argument('--marker_set_ids', dest = 'marker_set_ids', default=None,
                                         help='Provide a list of marker set ids (comma separated), whose markers will be used to build the tree.')
 
-    parser_tree_create.add_argument('--output', dest = 'out_dir', required=True,
+    parser_alignment_create.add_argument('--output', dest = 'out_dir', required=True,
                                         help='Directory to output the files')
-    parser_tree_create.add_argument('--no_tree', dest = 'no_tree', action="store_true",
-                                        help="Only output tree data, don't build the tree.")
+    #parser_alignment_create.add_argument('--no_tree', dest = 'no_tree', action="store_true",
+    #                                    help="Only output tree data, don't build the tree.")
 
-    parser_tree_create.add_argument('--profile', dest = 'profile',
+    parser_alignment_create.add_argument('--profile', dest = 'profile',
                                         help='Tree creation profile to use (default: %s)' % (profiles.ReturnDefaultProfileName(),))
-    parser_tree_create.add_argument('--profile_args', dest = 'profile_args', nargs='+',
+    parser_alignment_create.add_argument('--profile_args', dest = 'profile_args', nargs='+',
                                         help='Arguments to provide to the profile')
 
-    parser_tree_create.set_defaults(func=CreateTreeData)
+    parser_alignment_create.set_defaults(func=CreateTreeData)
 
 
     # Do the parsing
@@ -606,9 +606,9 @@ if __name__ == '__main__':
 
     if (args.category_parser_name == 'trees' and args.tree_subparser_name == 'create'):
         if (args.genome_batchfile is None and args.genome_ids is None and args.genome_list_ids is None and not args.all_genomes):
-            parser_tree_create.error('Need to specify at least one of --genome_batchfile, --genome_ids, --genome_list_ids or --all_genomes')
+            parser_alignment_create.error('Need to specify at least one of --genome_batchfile, --genome_ids, --genome_list_ids or --all_genomes')
         if (args.marker_batchfile is None and args.marker_ids is None and args.marker_set_ids is None ):
-            parser_tree_create.error('Need to specify at least one of --marker_batchfile, --marker_ids or --marker_set_ids')
+            parser_alignment_create.error('Need to specify at least one of --marker_batchfile, --marker_ids or --marker_set_ids')
 
     if (args.category_parser_name == 'genomes' and args.genome_subparser_name == 'view'):
         if (args.batchfile is not None or args.id_list is not None):
