@@ -83,15 +83,12 @@ root user will not be copied. This is useful for reference genomes
 downloaded from NCBI or IMG which will already be quite large and
 therefore probably not worth copying.
 
-### Adding genomes
-
 
 ### Adding genomes
 
 All genomes need to be run through CheckM before
-they can be added into the database; save the CheckM results using
-output format 2 (`-o 2`) and with the simple table (`--tab_table`)
-to file. You must also have a three column batchfile that describes
+they can be added into the database; save the CheckM results to a file
+using the `--tab_table` option. You must also have a three column batchfile that describes
 the genomes that you want to add, the first column is the *full
 path* to the file containing the genome, the second column is the
 name of the genome, the third column is a short description of the genome.
