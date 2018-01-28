@@ -70,7 +70,7 @@ def CreateTreeData(db, args):
 
         genome_batchfile_ids = []
         if args.genome_batchfile:
-            fh = open(args.genome_batchfile, "rb")
+            fh = open(args.genome_batchfile, "r")
             for line in fh:
                 line = line.rstrip()
                 genome_batchfile_ids.append(line)
@@ -100,7 +100,7 @@ def CreateTreeData(db, args):
 
     marker_batchfile_ids = []
     if args.marker_batchfile:
-        fh = open(args.marker_batchfile, "rb")
+        fh = open(args.marker_batchfile, "r")
         for line in fh:
             line = line.rstrip()
             marker_batchfile_ids.append(line)
@@ -587,8 +587,8 @@ if __name__ == '__main__':
 
     parser_alignment_create.add_argument('--output', dest = 'out_dir', required=True,
                                         help='Directory to output the files')
-    #parser_alignment_create.add_argument('--no_tree', dest = 'no_tree', action="store_true",
-    #                                    help="Only output tree data, don't build the tree.")
+    parser_alignment_create.add_argument('--no_tree', dest = 'no_tree', action="store_true",
+                                        help="Only output tree data, don't build the tree.")
 
     parser_alignment_create.add_argument('--profile', dest = 'profile',
                                         help='Tree creation profile to use (default: %s)' % (profiles.ReturnDefaultProfileName(),))
