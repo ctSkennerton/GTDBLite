@@ -145,6 +145,27 @@ To add in genomes as the root user:
 gtdblite.py -r genomes add --batchfile <batchfile> --checkm_results <checkm> --create_list <Genome List Name>
 ```
 
+### Adding Markers
+The markers you choose will depend on the scope of the tree you want to make.
+Some good gneral marker sets for bacteria, archaea or universal are available
+at http://gtdb.ecogenomic.org/downloads or from the [PhyEco manuscript](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0077033).
+
+Markers must be formatted for [hmmer3](http://hmmer.org) and each
+HMM marker must be in a separate file.
+Once you get a set of markers, add them to the database by creating
+a tab-delimeted file containing the *full path* to the maker file,
+the name of the marker and a short description. 
+
+With this file you can create a marker set in the database with the following:
+
+```
+gtdblite.py markers add --batchfile BATCHFILE --create_set MARKER_SET_NAME
+```
+
+There is also the option to modify an existing marker set (rather than create a new one)
+or choose to not add any of the markers in the file to a set. You can always make a
+set at a later date.
+
 ### Looking for available data
 
 #### Genome lists
@@ -164,5 +185,6 @@ marker set ids on the command line. Finding out the right genome list id
 and marker set id can be achieved using `gtdblite.py genome_lists view`
 and `gtdblite.py marker_sets view` sub-commands.
 ```
+# example genome_lists and marker_set_ids used below, don't just copy and paste
 gtdblite.py -t 20 alignment create --genome_list_ids 1,2,3 --marker_set_ids 8,1 --output my_genomes_tree_data
 ```
